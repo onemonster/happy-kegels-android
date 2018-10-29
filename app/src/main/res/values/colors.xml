@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="colorRest">#446CC7</color>
+    <color name="colorHold">#FF6666</color>
+    <color name="colorInhale">#ffffff</color>
+    <color name="colorExhale">#545454</color>
 </resources>

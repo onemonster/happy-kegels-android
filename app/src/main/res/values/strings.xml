@@ -1,6 +1,21 @@
 <resources>
     <string name="app_name">KG</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+
+    <string name="breath_inhale">Inhale</string>
+    <string name="breath_exhale">Exhale</string>
+    <string name="muscle_rest">Rest</string>
+    <string name="muscle_hold">Hold</string>
+
+    <string name="session_start">Start</string>
+    <string name="session_paused">Paused</string>
+    <string name="session_restart">Restart</string>
+
+    <string name="time_left">%1$ds left</string>
+
+    <string-array name="start_count_down">
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+        <item>Start!</item>
+    </string-array>
 </resources>

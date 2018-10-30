@@ -1,7 +1,6 @@
 package com.onemonster.kg.view
 
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.design.widget.BottomNavigationView
@@ -10,27 +9,24 @@ import android.support.v7.app.AppCompatActivity
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.onemonster.kg.R
+import com.onemonster.kg.util.Ticker
 import com.onemonster.kg.util.visible
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private val BREATH_INTERVAL_SEC = 3  //   3 seconds
-    private val MUSCLE_INTERVAL_SEC = 12 //  12 seconds
-    private val CYCLE_LENGTH_SEC = 24    //  24 seconds
-    private val SESSION_LENGTH_SEC = 144 // 144 seconds
-    private val READY_LENGTH_SEC = 3     //   3 seconds
-    private val COUNT_DOWN_SEC = 1       //   1 second
+    private val TICK_LENGTH = 1000L
 
-    private val BREATH_INTERVAL_MIL = BREATH_INTERVAL_SEC * 1000L
-    private val MUSCLE_INTERVAL_MIL = MUSCLE_INTERVAL_SEC * 1000L
-    private val CYCLE_LENGTH_MIL = CYCLE_LENGTH_SEC * 1000L
-    private val SESSION_LENGTH_MIL = SESSION_LENGTH_SEC * 1000L
-    private val READY_LENGTH_MIL = READY_LENGTH_SEC * 1000L
-    private val COUNT_DOWN_MIL = COUNT_DOWN_SEC * 1000L
+    private val BREATH_TICKS = 3
+    private val MUSCLE_TICKS = 12
+    private val CYCLE_TICKS = 24
+    private val SESSION_TICKS = 144
+    private val SESSION_LENGTH = SESSION_TICKS * TICK_LENGTH
+
+    private val READY_TICKS = 4
+    private val RESTART_TICKS = 2
 
     private var state: State = State.IDLE
-    private var startCountDownTimer: CountDownTimer? = null
-    private var mainCountDownTimer: CountDownTimer? = null
+    private lateinit var ticker: Ticker
 
     private lateinit var inhaleAnimation: Animation
     private lateinit var exhaleAnimation: Animation
@@ -68,17 +64,16 @@ class MainActivity : AppCompatActivity() {
         exhaleAnimation = AnimationUtils.loadAnimation(this, R.anim.exhale_animation)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        setMainViews()
-        setMainEvents()
-        setMainCountDownTimers()
+        setViews()
+        setEvents()
+        setTicker()
 
     }
 
-    private fun setMainViews(ticks: Int = 0) {
-        val startIndex = ticks
-        val breathStart = ticks % BREATH_INTERVAL_SEC == 0
-        val cycleLeftSec = MUSCLE_INTERVAL_SEC - (ticks % MUSCLE_INTERVAL_SEC)
-        val sessionLeftSec = SESSION_LENGTH_SEC - ticks
+    private fun setViews(ticks: Int = 0) {
+        val breathStart = ticks % BREATH_TICKS == 0
+        val cycleLeftSec = MUSCLE_TICKS - (ticks % MUSCLE_TICKS)
+        val sessionLeftSec = SESSION_TICKS - ticks
 
         // handle visibility
         when (state) {
@@ -87,6 +82,7 @@ class MainActivity : AppCompatActivity() {
                 text_muscle.visible = false
                 text_session.visible = false
             }
+            State.RESTART,
             State.INHALE_HOLD,
             State.EXHALE_HOLD,
             State.INHALE_REST,
@@ -107,8 +103,11 @@ class MainActivity : AppCompatActivity() {
             }
             State.START -> {
                 main_screen.setBackgroundColor(color(R.color.colorInhale))
-                button_main.text = resources.getStringArray(R.array.start_count_down)[startIndex]
+                button_main.text = resources.getStringArray(R.array.start_count_down)[ticks]
                 button_main.background = drawable(R.drawable.button_exhale)
+            }
+            State.RESTART -> {
+                button_main.text = resources.getStringArray(R.array.restart_count_down)[ticks]
             }
             State.INHALE_HOLD -> {
                 main_screen.setBackgroundColor(color(R.color.colorHold))
@@ -165,59 +164,52 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setMainEvents() {
+    private fun setEvents() {
         button_main.setOnClickListener {
             when (state) {
                 State.IDLE -> {
                     state = State.START
-                    setMainViews()
-                    startCountDownTimer?.start()
+                    setViews()
+                    ticker.start(READY_TICKS) { ticks ->
+                        setViews(ticks)
+                    }
                 }
                 State.INHALE_HOLD,
                 State.EXHALE_HOLD,
                 State.INHALE_REST,
                 State.EXHALE_REST -> {
-//                    state = State.PAUSE
+                    ticker.pause()
+                    inhaleAnimation.cancel()
+                    exhaleAnimation.cancel()
+                    state = State.PAUSE
+                    setViews()
+                }
+                State.PAUSE -> {
+                    state = State.RESTART
+                    setViews()
+                    ticker.start(RESTART_TICKS) { ticks ->
+                        setViews(ticks)
+                    }
                 }
             }
         }
     }
 
-    private fun setMainCountDownTimers() {
-        startCountDownTimer = object : CountDownTimer(READY_LENGTH_MIL + COUNT_DOWN_MIL, COUNT_DOWN_MIL) {
-            private var ticks = 0
-
-            override fun onFinish() {
-                state = State.INHALE_HOLD
-                mainCountDownTimer?.start()
-                ticks = 0
+    private fun setTicker() {
+        ticker = object : Ticker(SESSION_LENGTH, TICK_LENGTH) {
+            override fun onTick(ticks: Int) {
+                when (ticks % CYCLE_TICKS) {
+                    in BREATH_TICKS * 0 until BREATH_TICKS * 1, in BREATH_TICKS * 2 until BREATH_TICKS * 3 -> state = State.INHALE_HOLD
+                    in BREATH_TICKS * 1 until BREATH_TICKS * 2, in BREATH_TICKS * 3 until BREATH_TICKS * 4 -> state = State.EXHALE_HOLD
+                    in BREATH_TICKS * 4 until BREATH_TICKS * 5, in BREATH_TICKS * 6 until BREATH_TICKS * 7 -> state = State.INHALE_REST
+                    in BREATH_TICKS * 5 until BREATH_TICKS * 6, in BREATH_TICKS * 7 until BREATH_TICKS * 8 -> state = State.EXHALE_REST
+                }
+                setViews(ticks)
             }
-
-            override fun onTick(millisUntilFinished: Long) {
-                setMainViews(ticks)
-                ticks++
-            }
-        }
-
-        mainCountDownTimer = object : CountDownTimer(SESSION_LENGTH_MIL, COUNT_DOWN_MIL) {
-            private var ticks = 0
 
             override fun onFinish() {
                 state = State.IDLE
-                setMainViews()
-                ticks = 0
-                // TODO: show popup, update stats
-            }
-
-            override fun onTick(millisUntilFinished: Long) {
-                when (ticks % CYCLE_LENGTH_SEC) {
-                    0, 6 -> state = State.INHALE_HOLD
-                    3, 9 -> state = State.EXHALE_HOLD
-                    12, 18 -> state = State.INHALE_REST
-                    15, 21 -> state = State.EXHALE_REST
-                }
-                setMainViews(ticks)
-                ticks++
+                setViews()
             }
         }
     }
@@ -225,6 +217,7 @@ class MainActivity : AppCompatActivity() {
     enum class State {
         IDLE,
         START,
+        RESTART,
         INHALE_HOLD,
         EXHALE_HOLD,
         INHALE_REST,

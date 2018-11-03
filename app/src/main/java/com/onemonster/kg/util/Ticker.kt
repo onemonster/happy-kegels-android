@@ -7,6 +7,7 @@ abstract class Ticker(private val millisInFuture: Long, private val countDownInt
     private var ticks = 0
 
     private var countDownTimer: CountDownTimer? = null
+    private var delayCountDownTimer: CountDownTimer? = null
 
     private var isPaused = true
 
@@ -41,7 +42,7 @@ abstract class Ticker(private val millisInFuture: Long, private val countDownInt
     fun start(delayTicks: Int = 0, onTick: ((Int) -> Unit)? = null): Ticker {
         if (isPaused) {
             isPaused = false
-            object : CountDownTimer(delayTicks * countDownInterval, countDownInterval) {
+            delayCountDownTimer = object : CountDownTimer(delayTicks * countDownInterval, countDownInterval) {
                 var ticks = 0
                 override fun onTick(millisUntilFinished: Long) {
                     onTick?.invoke(ticks)
@@ -59,6 +60,7 @@ abstract class Ticker(private val millisInFuture: Long, private val countDownInt
 
     fun pause() {
         if (!isPaused) {
+            delayCountDownTimer?.cancel()
             countDownTimer?.cancel()
         }
         isPaused = true

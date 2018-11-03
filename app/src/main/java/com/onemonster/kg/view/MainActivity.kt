@@ -3,9 +3,10 @@ package com.onemonster.kg.view
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
-import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.onemonster.kg.R
@@ -25,45 +26,44 @@ class MainActivity : AppCompatActivity() {
     private val READY_TICKS = 4
     private val RESTART_TICKS = 2
 
+    private val MAIN_SCREEN_INDEX = 1
+
     private var state: State = State.IDLE
     private lateinit var ticker: Ticker
 
     private lateinit var inhaleAnimation: Animation
     private lateinit var exhaleAnimation: Animation
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_info -> {
-                info_screen.visible = true
-                main_screen.visible = false
-                stat_screen.visible = false
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_main -> {
-                info_screen.visible = false
-                main_screen.visible = true
-                stat_screen.visible = false
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_stat -> {
-                info_screen.visible = false
-                main_screen.visible = false
-                stat_screen.visible = true
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
+    private lateinit var screens: List<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        screens = listOf(screen_info, screen_main, screen_etc)
         inhaleAnimation = AnimationUtils.loadAnimation(this, R.anim.inhale_animation)
         exhaleAnimation = AnimationUtils.loadAnimation(this, R.anim.exhale_animation)
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        screens.forEach { it.visible = false }
+
+        navigation.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                tab?.position?.let { screens[it].visible = false }
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.position?.let { screens[it].visible = true }
+                if (!inState(State.IDLE, State.PAUSE)) {
+                    button_main.performClick()
+                }
+            }
+        })
+
+        navigation.getTabAt(MAIN_SCREEN_INDEX)?.select()
+
         setViews()
         setEvents()
         setTicker()
@@ -97,12 +97,12 @@ class MainActivity : AppCompatActivity() {
         // handle background and text
         when (state) {
             State.IDLE -> {
-                main_screen.setBackgroundColor(color(R.color.colorInhale))
+                screen_main.setBackgroundColor(color(R.color.colorInhale))
                 button_main.text = getString(R.string.session_start)
                 button_main.background = drawable(R.drawable.button_exhale)
             }
             State.START -> {
-                main_screen.setBackgroundColor(color(R.color.colorInhale))
+                screen_main.setBackgroundColor(color(R.color.colorInhale))
                 button_main.text = resources.getStringArray(R.array.start_count_down)[ticks]
                 button_main.background = drawable(R.drawable.button_exhale)
             }
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                 button_main.text = resources.getStringArray(R.array.restart_count_down)[ticks]
             }
             State.INHALE_HOLD -> {
-                main_screen.setBackgroundColor(color(R.color.colorHold))
+                screen_main.setBackgroundColor(color(R.color.colorHold))
                 text_session.text = getString(R.string.time_left, sessionLeftSec)
                 text_muscle.text = getString(R.string.muscle_hold)
                 text_breath.text = getString(R.string.breath_inhale)
@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
                 button_main.background = drawable(R.drawable.button_inhale)
             }
             State.EXHALE_HOLD -> {
-                main_screen.setBackgroundColor(color(R.color.colorHold))
+                screen_main.setBackgroundColor(color(R.color.colorHold))
                 text_session.text = getString(R.string.time_left, sessionLeftSec)
                 text_muscle.text = getString(R.string.muscle_hold)
                 text_breath.text = getString(R.string.breath_exhale)
@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                 button_main.background = drawable(R.drawable.button_exhale)
             }
             State.INHALE_REST -> {
-                main_screen.setBackgroundColor(color(R.color.colorRest))
+                screen_main.setBackgroundColor(color(R.color.colorRest))
                 text_session.text = getString(R.string.time_left, sessionLeftSec)
                 text_muscle.text = getString(R.string.muscle_rest)
                 text_breath.text = getString(R.string.breath_inhale)
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                 button_main.background = drawable(R.drawable.button_inhale)
             }
             State.EXHALE_REST -> {
-                main_screen.setBackgroundColor(color(R.color.colorRest))
+                screen_main.setBackgroundColor(color(R.color.colorRest))
                 text_session.text = getString(R.string.time_left, sessionLeftSec)
                 text_muscle.text = getString(R.string.muscle_rest)
                 text_breath.text = getString(R.string.breath_exhale)
@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity() {
                 button_main.background = drawable(R.drawable.button_exhale)
             }
             State.PAUSE -> {
-                main_screen.setBackgroundColor(color(R.color.colorExhale))
+                screen_main.setBackgroundColor(color(R.color.colorExhale))
                 button_main.text = getString(R.string.session_paused)
                 button_main.background = drawable(R.drawable.button_inhale)
             }
@@ -174,15 +174,13 @@ class MainActivity : AppCompatActivity() {
                         setViews(ticks)
                     }
                 }
+                State.START -> stopStart()
+                State.RESTART -> stopRestart()
                 State.INHALE_HOLD,
                 State.EXHALE_HOLD,
                 State.INHALE_REST,
                 State.EXHALE_REST -> {
-                    ticker.pause()
-                    inhaleAnimation.cancel()
-                    exhaleAnimation.cancel()
-                    state = State.PAUSE
-                    setViews()
+                    pause()
                 }
                 State.PAUSE -> {
                     state = State.RESTART
@@ -214,6 +212,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun stopStart() {
+        ticker.pause()
+        state = State.IDLE
+        setViews()
+    }
+
+    private fun stopRestart() {
+        ticker.pause()
+        state = State.PAUSE
+        setViews()
+    }
+
+    private fun pause() {
+        ticker.pause()
+        inhaleAnimation.cancel()
+        exhaleAnimation.cancel()
+        state = State.PAUSE
+        setViews()
+    }
+
     enum class State {
         IDLE,
         START,
@@ -223,6 +241,16 @@ class MainActivity : AppCompatActivity() {
         INHALE_REST,
         EXHALE_REST,
         PAUSE
+    }
+
+    private fun inState(vararg states: State): Boolean {
+        val currentState = state
+        for (state in states) {
+            if (state == currentState) {
+                return true
+            }
+        }
+        return false
     }
 
     fun drawable(@DrawableRes id: Int) = ContextCompat.getDrawable(this, id)

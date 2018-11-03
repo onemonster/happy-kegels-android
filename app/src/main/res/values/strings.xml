@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">KG</string>
 
+    <!-- main -->
     <string name="breath_inhale">Inhale</string>
     <string name="breath_exhale">Exhale</string>
     <string name="muscle_rest">Rest</string>
@@ -23,4 +24,21 @@
         <item>ready</item>
         <item>Start!</item>
     </string-array>
+
+    <!-- info -->
+    <string name="header_1">Who are kegels for?</string>
+    <string name="body_1">
+        1. Want harder erections? (going through erectile dysfunction?)\n
+        \nEveryone likes harder erections (especially if it’s your own ^^). Kegels improve your blood circulation near your private area and also helps you to gain control making collecting blood and keeping it where you want it to stay. According to one study after 4 months of consistent kegel exercises 75% of ED(erectile dysfunction) patients were cured!\n\n
+        2. Want to last longer in bed?\n
+        \nOne of the biggest self esteem killers a lot of men have to face is premature ejaculation (PE). Well thank god we have a solution! Kegels train the pelvic floor muscles so that you can have better control over your ejaculations (allowing you to ejaculate stronger and farther!). So if you want to impress your partner or you’re attending a cum shot competition we recommend you do kegels daily. There’s also research that for those with PE who did kegels for over two months, the cure rate was 54%, with men under 35 years old 65%!\n\n
+        3. Want a bigger, stronger penis?\n
+        \nMore control over blood circulation means more blood to make your penis bigger and harder!\n\n
+        4. Prevent and cure UI (urinary incontinence)!\n
+        \nUrinary incontinence is not only for middle aged women! With kegels you can prevent and cure UI. It’s better being safe than sorry! Kegels are healthy!
+    </string>
+    <string name="header_1_1">1. Want harder erections? (going through erectile dysfunction?)\n</string>
+    <string name="header_1_2">2. Want to last longer in bed?\n</string>
+    <string name="header_1_3">3. Want a bigger, stronger penis?\n</string>
+    <string name="header_1_4">4. Prevent and cure UI (urinary incontinence)!\n</string>
 </resources>

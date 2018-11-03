@@ -1,12 +1,17 @@
 package com.onemonster.kg.view
 
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -59,13 +64,16 @@ class MainActivity : AppCompatActivity() {
         })
 
         navigation.getTabAt(kgPreference.tabIndex)?.select()
+        screens[kgPreference.tabIndex].visible = true
 
-        setViews()
-        setEvents()
-        setTicker()
+        setMainViews()
+        setMainEvents()
+        setMainTicker()
+
+        setInfoViews()
     }
 
-    private fun setViews(ticks: Int = 0) {
+    private fun setMainViews(ticks: Int = 0) {
         val breathStart = ticks % BREATH_TICKS == 0
         val cycleLeftSec = MUSCLE_TICKS - (ticks % MUSCLE_TICKS)
         val sessionLeftSec = SESSION_TICKS - ticks
@@ -159,14 +167,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setEvents() {
+    private fun setMainEvents() {
         button_main.setOnClickListener {
             when (state) {
                 State.IDLE -> {
                     state = State.START
-                    setViews()
+                    setMainViews()
                     ticker.start(READY_TICKS) { ticks ->
-                        setViews(ticks)
+                        setMainViews(ticks)
                     }
                 }
                 State.START -> stopStart()
@@ -179,16 +187,16 @@ class MainActivity : AppCompatActivity() {
                 }
                 State.PAUSE -> {
                     state = State.RESTART
-                    setViews()
+                    setMainViews()
                     ticker.start(RESTART_TICKS) { ticks ->
-                        setViews(ticks)
+                        setMainViews(ticks)
                     }
                 }
             }
         }
     }
 
-    private fun setTicker() {
+    private fun setMainTicker() {
         ticker = object : Ticker(SESSION_LENGTH, TICK_LENGTH) {
             override fun onTick(ticks: Int) {
                 when (ticks % CYCLE_TICKS) {
@@ -197,26 +205,85 @@ class MainActivity : AppCompatActivity() {
                     in BREATH_TICKS * 4 until BREATH_TICKS * 5, in BREATH_TICKS * 6 until BREATH_TICKS * 7 -> state = State.INHALE_REST
                     in BREATH_TICKS * 5 until BREATH_TICKS * 6, in BREATH_TICKS * 7 until BREATH_TICKS * 8 -> state = State.EXHALE_REST
                 }
-                setViews(ticks)
+                setMainViews(ticks)
             }
 
             override fun onFinish() {
                 state = State.IDLE
-                setViews()
+                setMainViews()
             }
         }
+    }
+
+    private fun setInfoViews() {
+        val chapter_span_1 = SpannableString(getString(R.string.body_1))
+        val chapter_1_header_1 = getString(R.string.header_1_1)
+        val chapter_1_header_2 = getString(R.string.header_1_2)
+        val chapter_1_header_3 = getString(R.string.header_1_3)
+        val chapter_1_header_4 = getString(R.string.header_1_4)
+
+        chapter_span_1.setSpan(
+                RelativeSizeSpan(1.1f),
+                chapter_span_1.indexOf(chapter_1_header_1),
+                chapter_span_1.indexOf(chapter_1_header_1) + chapter_1_header_1.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        chapter_span_1.setSpan(
+                RelativeSizeSpan(1.1f),
+                chapter_span_1.indexOf(chapter_1_header_2),
+                chapter_span_1.indexOf(chapter_1_header_2) + chapter_1_header_2.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        chapter_span_1.setSpan(
+                RelativeSizeSpan(1.1f),
+                chapter_span_1.indexOf(chapter_1_header_3),
+                chapter_span_1.indexOf(chapter_1_header_3) + chapter_1_header_3.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        chapter_span_1.setSpan(
+                RelativeSizeSpan(1.1f),
+                chapter_span_1.indexOf(chapter_1_header_4),
+                chapter_span_1.indexOf(chapter_1_header_4) + chapter_1_header_4.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        chapter_span_1.setSpan(
+                StyleSpan(Typeface.BOLD),
+                chapter_span_1.indexOf(chapter_1_header_1),
+                chapter_span_1.indexOf(chapter_1_header_1) + chapter_1_header_1.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        chapter_span_1.setSpan(
+                StyleSpan(Typeface.BOLD),
+                chapter_span_1.indexOf(chapter_1_header_2),
+                chapter_span_1.indexOf(chapter_1_header_2) + chapter_1_header_2.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        chapter_span_1.setSpan(
+                StyleSpan(Typeface.BOLD),
+                chapter_span_1.indexOf(chapter_1_header_3),
+                chapter_span_1.indexOf(chapter_1_header_3) + chapter_1_header_3.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        chapter_span_1.setSpan(
+                StyleSpan(Typeface.BOLD),
+                chapter_span_1.indexOf(chapter_1_header_4),
+                chapter_span_1.indexOf(chapter_1_header_4) + chapter_1_header_4.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        chapter_1.text = chapter_span_1
     }
 
     private fun stopStart() {
         ticker.pause()
         state = State.IDLE
-        setViews()
+        setMainViews()
     }
 
     private fun stopRestart() {
         ticker.pause()
         state = State.PAUSE
-        setViews()
+        setMainViews()
     }
 
     private fun pause() {
@@ -224,7 +291,7 @@ class MainActivity : AppCompatActivity() {
         inhaleAnimation.cancel()
         exhaleAnimation.cancel()
         state = State.PAUSE
-        setViews()
+        setMainViews()
     }
 
     enum class State {

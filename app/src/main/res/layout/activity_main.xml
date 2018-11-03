@@ -12,13 +12,54 @@
         android:id="@+id/screen_info"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         >
 
+        <ScrollView
+            android:id="@+id/scroll_info"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:id="@+id/header_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/header_1"
+                    android:textColor="@color/colorExhale"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:id="@+id/chapter_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:textColor="@color/colorExhale"
+                    android:textSize="20sp"
+                    app:layout_constraintTop_toBottomOf="@+id/header_1"
+                    />
+            </android.support.constraint.ConstraintLayout>
+
+        </ScrollView>
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout

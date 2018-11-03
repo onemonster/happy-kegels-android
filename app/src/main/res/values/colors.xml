@@ -8,4 +8,6 @@
     <color name="colorHold">#FF6666</color>
     <color name="colorInhale">#FFFFFF</color>
     <color name="colorExhale">#545454</color>
+
+    <color name="colorBackground">#D8D8D8</color>
 </resources>

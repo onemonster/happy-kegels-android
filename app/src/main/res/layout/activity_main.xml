@@ -12,6 +12,7 @@
         android:id="@+id/screen_info"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -121,12 +122,74 @@
         android:id="@+id/screen_etc"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
+        android:paddingEnd="30dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingStart="30dp"
+        android:paddingTop="30dp"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         >
+
+        <TextView
+            android:id="@+id/text_difficulty_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_difficulty"
+            android:textColor="@color/colorExhale"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <ToggleButton
+            android:id="@+id/toggle_difficulty_easy"
+            style="@style/DifficultyToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginTop="30dp"
+            android:checked="false"
+            android:textOff="@string/difficulty_easy"
+            android:textOn="@string/difficulty_easy"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_difficulty_label"
+            />
+
+        <ToggleButton
+            android:id="@+id/toggle_difficulty_medium"
+            style="@style/DifficultyToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:textOff="@string/difficulty_medium"
+            android:textOn="@string/difficulty_medium"
+            app:layout_constraintEnd_toStartOf="@+id/toggle_difficulty_hard"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/toggle_difficulty_easy"
+            app:layout_constraintTop_toTopOf="@+id/toggle_difficulty_easy"
+            />
+
+        <ToggleButton
+            android:id="@+id/toggle_difficulty_hard"
+            style="@style/DifficultyToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:checked="false"
+            android:textOff="@string/difficulty_hard"
+            android:textOn="@string/difficulty_hard"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/toggle_difficulty_easy"
+            />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>
 

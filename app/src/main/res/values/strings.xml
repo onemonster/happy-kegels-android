@@ -41,4 +41,10 @@
     <string name="header_1_2">2. Want to last longer in bed?\n</string>
     <string name="header_1_3">3. Want a bigger, stronger penis?\n</string>
     <string name="header_1_4">4. Prevent and cure UI (urinary incontinence)!\n</string>
+
+    <!-- etc -->
+    <string name="label_difficulty">Difficulty</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="difficulty_medium">Medium</string>
+    <string name="difficulty_hard">Hard</string>
 </resources>

@@ -71,12 +71,15 @@ class MainActivity : AppCompatActivity() {
         setMainTicker()
 
         setInfoViews()
+
+        setEtcViews()
+        setEtcEvents()
     }
 
     private fun setMainViews(ticks: Int = 0) {
         val breathStart = ticks % BREATH_TICKS == 0
         val cycleLeftSec = MUSCLE_TICKS - (ticks % MUSCLE_TICKS)
-        val sessionLeftSec = SESSION_TICKS - ticks
+        val sessionLeftSec = kgPreference.sessions * CYCLE_TICKS - ticks
 
         // handle visibility
         when (state) {
@@ -197,7 +200,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setMainTicker() {
-        ticker = object : Ticker(SESSION_LENGTH, TICK_LENGTH) {
+        ticker = object : Ticker(kgPreference.sessions * CYCLE_TICKS * TICK_LENGTH, TICK_LENGTH) {
             override fun onTick(ticks: Int) {
                 when (ticks % CYCLE_TICKS) {
                     in BREATH_TICKS * 0 until BREATH_TICKS * 1, in BREATH_TICKS * 2 until BREATH_TICKS * 3 -> state = State.INHALE_HOLD
@@ -216,62 +219,87 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setInfoViews() {
-        val chapter_span_1 = SpannableString(getString(R.string.body_1))
-        val chapter_1_header_1 = getString(R.string.header_1_1)
-        val chapter_1_header_2 = getString(R.string.header_1_2)
-        val chapter_1_header_3 = getString(R.string.header_1_3)
-        val chapter_1_header_4 = getString(R.string.header_1_4)
+        val chapterSpan1 = SpannableString(getString(R.string.body_1))
+        val chapter1Header1 = getString(R.string.header_1_1)
+        val chapter1Header2 = getString(R.string.header_1_2)
+        val chapter1Header3 = getString(R.string.header_1_3)
+        val chapter1Header4 = getString(R.string.header_1_4)
 
-        chapter_span_1.setSpan(
+        chapterSpan1.setSpan(
                 RelativeSizeSpan(1.1f),
-                chapter_span_1.indexOf(chapter_1_header_1),
-                chapter_span_1.indexOf(chapter_1_header_1) + chapter_1_header_1.length,
+                chapterSpan1.indexOf(chapter1Header1),
+                chapterSpan1.indexOf(chapter1Header1) + chapter1Header1.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        chapter_span_1.setSpan(
+        chapterSpan1.setSpan(
                 RelativeSizeSpan(1.1f),
-                chapter_span_1.indexOf(chapter_1_header_2),
-                chapter_span_1.indexOf(chapter_1_header_2) + chapter_1_header_2.length,
+                chapterSpan1.indexOf(chapter1Header2),
+                chapterSpan1.indexOf(chapter1Header2) + chapter1Header2.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        chapter_span_1.setSpan(
+        chapterSpan1.setSpan(
                 RelativeSizeSpan(1.1f),
-                chapter_span_1.indexOf(chapter_1_header_3),
-                chapter_span_1.indexOf(chapter_1_header_3) + chapter_1_header_3.length,
+                chapterSpan1.indexOf(chapter1Header3),
+                chapterSpan1.indexOf(chapter1Header3) + chapter1Header3.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        chapter_span_1.setSpan(
+        chapterSpan1.setSpan(
                 RelativeSizeSpan(1.1f),
-                chapter_span_1.indexOf(chapter_1_header_4),
-                chapter_span_1.indexOf(chapter_1_header_4) + chapter_1_header_4.length,
+                chapterSpan1.indexOf(chapter1Header4),
+                chapterSpan1.indexOf(chapter1Header4) + chapter1Header4.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        chapter_span_1.setSpan(
+        chapterSpan1.setSpan(
                 StyleSpan(Typeface.BOLD),
-                chapter_span_1.indexOf(chapter_1_header_1),
-                chapter_span_1.indexOf(chapter_1_header_1) + chapter_1_header_1.length,
+                chapterSpan1.indexOf(chapter1Header1),
+                chapterSpan1.indexOf(chapter1Header1) + chapter1Header1.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        chapter_span_1.setSpan(
+        chapterSpan1.setSpan(
                 StyleSpan(Typeface.BOLD),
-                chapter_span_1.indexOf(chapter_1_header_2),
-                chapter_span_1.indexOf(chapter_1_header_2) + chapter_1_header_2.length,
+                chapterSpan1.indexOf(chapter1Header2),
+                chapterSpan1.indexOf(chapter1Header2) + chapter1Header2.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        chapter_span_1.setSpan(
+        chapterSpan1.setSpan(
                 StyleSpan(Typeface.BOLD),
-                chapter_span_1.indexOf(chapter_1_header_3),
-                chapter_span_1.indexOf(chapter_1_header_3) + chapter_1_header_3.length,
+                chapterSpan1.indexOf(chapter1Header3),
+                chapterSpan1.indexOf(chapter1Header3) + chapter1Header3.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        chapter_span_1.setSpan(
+        chapterSpan1.setSpan(
                 StyleSpan(Typeface.BOLD),
-                chapter_span_1.indexOf(chapter_1_header_4),
-                chapter_span_1.indexOf(chapter_1_header_4) + chapter_1_header_4.length,
+                chapterSpan1.indexOf(chapter1Header4),
+                chapterSpan1.indexOf(chapter1Header4) + chapter1Header4.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
-        chapter_1.text = chapter_span_1
+        chapter_1.text = chapterSpan1
+    }
+
+    private fun setEtcViews() {
+        renderDifficultyToggles()
+    }
+
+    private fun setEtcEvents() {
+        toggle_difficulty_easy.setOnCheckedChangeListener { _, checked ->
+            if (checked) {
+                kgPreference.sessions = EASY_SESSIONS
+            }
+            renderDifficultyToggles()
+        }
+        toggle_difficulty_medium.setOnCheckedChangeListener { _, checked ->
+            if (checked) {
+                kgPreference.sessions = MEDIUM_SESSIONS
+            }
+            renderDifficultyToggles()
+        }
+        toggle_difficulty_hard.setOnCheckedChangeListener { _, checked ->
+            if (checked) {
+                kgPreference.sessions = HARD_SESSIONS
+            }
+            renderDifficultyToggles()
+        }
     }
 
     private fun stopStart() {
@@ -292,6 +320,26 @@ class MainActivity : AppCompatActivity() {
         exhaleAnimation.cancel()
         state = State.PAUSE
         setMainViews()
+    }
+
+    private fun renderDifficultyToggles() {
+        when (kgPreference.sessions) {
+            EASY_SESSIONS -> {
+                toggle_difficulty_easy.isChecked = true
+                toggle_difficulty_medium.isChecked = false
+                toggle_difficulty_hard.isChecked = false
+            }
+            MEDIUM_SESSIONS -> {
+                toggle_difficulty_easy.isChecked = false
+                toggle_difficulty_medium.isChecked = true
+                toggle_difficulty_hard.isChecked = false
+            }
+            HARD_SESSIONS -> {
+                toggle_difficulty_easy.isChecked = false
+                toggle_difficulty_medium.isChecked = false
+                toggle_difficulty_hard.isChecked = true
+            }
+        }
     }
 
     enum class State {

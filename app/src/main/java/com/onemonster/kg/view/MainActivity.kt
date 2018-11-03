@@ -1,5 +1,6 @@
 package com.onemonster.kg.view
 
+import android.content.Context
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
@@ -10,24 +11,10 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.onemonster.kg.R
-import com.onemonster.kg.util.Ticker
-import com.onemonster.kg.util.visible
+import com.onemonster.kg.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private val TICK_LENGTH = 1000L
-
-    private val BREATH_TICKS = 3
-    private val MUSCLE_TICKS = 12
-    private val CYCLE_TICKS = 24
-    private val SESSION_TICKS = 144
-    private val SESSION_LENGTH = SESSION_TICKS * TICK_LENGTH
-
-    private val READY_TICKS = 4
-    private val RESTART_TICKS = 2
-
-    private val MAIN_SCREEN_INDEX = 1
-
     private var state: State = State.IDLE
     private lateinit var ticker: Ticker
 
@@ -35,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var exhaleAnimation: Animation
 
     private lateinit var screens: List<View>
+
+    private lateinit var kgPreference: KGPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -46,6 +35,10 @@ class MainActivity : AppCompatActivity() {
 
         screens.forEach { it.visible = false }
 
+        val sharedPreferences = this.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE)
+
+        kgPreference = KGPreference(sharedPreferences)
+
         navigation.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
@@ -55,19 +48,21 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.position?.let { screens[it].visible = true }
+                tab?.position?.let {
+                    screens[it].visible = true
+                    kgPreference.tabIndex = it
+                }
                 if (!inState(State.IDLE, State.PAUSE)) {
                     button_main.performClick()
                 }
             }
         })
 
-        navigation.getTabAt(MAIN_SCREEN_INDEX)?.select()
+        navigation.getTabAt(kgPreference.tabIndex)?.select()
 
         setViews()
         setEvents()
         setTicker()
-
     }
 
     private fun setViews(ticks: Int = 0) {

@@ -15,6 +15,8 @@ import android.text.style.StyleSpan
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.onemonster.kg.R
 import com.onemonster.kg.util.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -34,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        MobileAds.initialize(this, "ca-app-pub-3315479630821302~5829933722")
         screens = listOf(screen_info, screen_main, screen_etc)
         inhaleAnimation = AnimationUtils.loadAnimation(this, R.anim.inhale_animation)
         exhaleAnimation = AnimationUtils.loadAnimation(this, R.anim.exhale_animation)
@@ -66,6 +69,8 @@ class MainActivity : AppCompatActivity() {
         navigation.getTabAt(kgPreference.tabIndex)?.select()
         screens[kgPreference.tabIndex].visible = true
 
+        setViews()
+
         setMainViews()
         setMainEvents()
         setMainTicker()
@@ -74,6 +79,11 @@ class MainActivity : AppCompatActivity() {
 
         setEtcViews()
         setEtcEvents()
+    }
+
+    private fun setViews() {
+        val adRequest = AdRequest.Builder().build()
+        ad_view.loadAd(adRequest)
     }
 
     private fun setMainViews(ticks: Int = 0) {

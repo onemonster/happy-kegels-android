@@ -16,8 +16,15 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue("string", "GOOGLE_AD_MOB_APP_ID", "ca-app-pub-3315479630821302~5829933722")
+            resValue("string", "GOOGLE_AD_MOB_TOP_BANNER_UNIT_ID", "ca-app-pub-3315479630821302/9932830261")
+        }
+        debug {
+            minifyEnabled false
+            resValue("string", "GOOGLE_AD_MOB_APP_ID", "ca-app-pub-3315479630821302~5829933722")
+            resValue("string", "GOOGLE_AD_MOB_TOP_BANNER_UNIT_ID", "ca-app-pub-3940256099942544/6300978111")
         }
     }
 }

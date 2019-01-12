@@ -14,7 +14,9 @@ import android.text.style.StyleSpan
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
+import com.onemonster.kg.BuildConfig
 import com.onemonster.kg.R
 import com.onemonster.kg.util.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -33,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        MobileAds.initialize(this, "ca-app-pub-3315479630821302~5829933722")
+        MobileAds.initialize(this, getString(R.string.GOOGLE_AD_MOB_APP_ID))
         inhaleAnimation = AnimationUtils.loadAnimation(this, R.anim.inhale_animation)
         exhaleAnimation = AnimationUtils.loadAnimation(this, R.anim.exhale_animation)
 

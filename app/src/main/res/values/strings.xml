@@ -14,9 +14,9 @@
     <string name="time_left">%1$ds left</string>
 
     <string-array name="start_count_down">
-        <item>3</item>
-        <item>2</item>
-        <item>1</item>
+        <item>ready (3)</item>
+        <item>ready (2)</item>
+        <item>ready (1)</item>
         <item>Start!</item>
     </string-array>
 

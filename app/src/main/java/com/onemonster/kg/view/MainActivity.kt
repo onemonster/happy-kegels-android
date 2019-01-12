@@ -28,46 +28,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var inhaleAnimation: Animation
     private lateinit var exhaleAnimation: Animation
 
-    private lateinit var screens: List<View>
-
     private lateinit var kgPreference: KGPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         MobileAds.initialize(this, "ca-app-pub-3315479630821302~5829933722")
-        screens = listOf(screen_info, screen_main, screen_etc)
         inhaleAnimation = AnimationUtils.loadAnimation(this, R.anim.inhale_animation)
         exhaleAnimation = AnimationUtils.loadAnimation(this, R.anim.exhale_animation)
-
-        screens.forEach { it.visible = false }
 
         val sharedPreferences = this.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE)
 
         kgPreference = KGPreference(sharedPreferences)
-
-        navigation.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                tab?.position?.let { screens[it].visible = false }
-            }
-
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.position?.let {
-                    screens[it].visible = true
-                    kgPreference.tabIndex = it
-                }
-                if (!inState(State.IDLE, State.PAUSE)) {
-                    button_main.performClick()
-                }
-            }
-        })
-
-        navigation.getTabAt(kgPreference.tabIndex)?.select()
-        screens[kgPreference.tabIndex].visible = true
 
         setViews()
 
@@ -88,79 +60,83 @@ class MainActivity : AppCompatActivity() {
 
     private fun setMainViews(ticks: Int = 0) {
         val breathStart = ticks % BREATH_TICKS == 0
+        val muscleStart = ticks % MUSCLE_TICKS == 0
+        val isMouthOpen = ticks % 2 == 1
         val cycleLeftSec = MUSCLE_TICKS - (ticks % MUSCLE_TICKS)
         val sessionLeftSec = kgPreference.sessions * CYCLE_TICKS - ticks
 
-        // handle visibility
-        when (state) {
-            State.IDLE, State.START -> {
-                text_breath.visible = false
-                text_muscle.visible = false
-                text_session.visible = false
-            }
-            State.RESTART,
-            State.INHALE_HOLD,
-            State.EXHALE_HOLD,
-            State.INHALE_REST,
-            State.EXHALE_REST,
-            State.PAUSE -> {
-                text_breath.visible = true
-                text_muscle.visible = true
-                text_session.visible = true
-            }
-        }
+//        // handle visibility
+//        when (state) {
+//            State.IDLE, State.START -> {
+//                text_breath.visible = false
+//                text_muscle.visible = false
+//                text_session.visible = false
+//            }
+//            State.RESTART,
+//            State.INHALE_HOLD,
+//            State.EXHALE_HOLD,
+//            State.INHALE_REST,
+//            State.EXHALE_REST,
+//            State.PAUSE -> {
+//                text_breath.visible = true
+//                text_muscle.visible = true
+//                text_session.visible = true
+//            }
+//        }
 
         // handle background and text
         when (state) {
             State.IDLE -> {
-                screen_main.setBackgroundColor(color(R.color.colorInhale))
-                button_main.text = getString(R.string.session_start)
-                button_main.background = drawable(R.drawable.button_exhale)
+                button_main.background = drawable(R.drawable.idle_mouth_close)
+                text_main.text = getString(R.string.session_start)
             }
             State.START -> {
-                screen_main.setBackgroundColor(color(R.color.colorInhale))
-                button_main.text = resources.getStringArray(R.array.start_count_down)[ticks]
-                button_main.background = drawable(R.drawable.button_exhale)
+                button_main.background = if (isMouthOpen) {
+                    drawable(R.drawable.idle_mouth_open)
+                } else {
+                    drawable(R.drawable.idle_mouth_close)
+                }
+                text_main.text = resources.getStringArray(R.array.start_count_down)[ticks]
             }
             State.RESTART -> {
-                button_main.text = resources.getStringArray(R.array.restart_count_down)[ticks]
+                text_main.text = resources.getStringArray(R.array.restart_count_down)[ticks]
+                button_main.background = if (isMouthOpen) {
+                    drawable(R.drawable.idle_mouth_open)
+                } else {
+                    drawable(R.drawable.idle_mouth_close)
+                }
             }
             State.INHALE_HOLD -> {
-                screen_main.setBackgroundColor(color(R.color.colorHold))
+                button_main.background = drawable(R.drawable.inhale_hold)
                 text_session.text = getString(R.string.time_left, sessionLeftSec)
-                text_muscle.text = getString(R.string.muscle_hold)
-                text_breath.text = getString(R.string.breath_inhale)
-                button_main.text = cycleLeftSec.toString()
-                button_main.background = drawable(R.drawable.button_inhale)
+                if (muscleStart) {
+                    text_main.text = getString(R.string.muscle_hold)
+                } else {
+                    text_main.text = cycleLeftSec.toString()
+                }
             }
             State.EXHALE_HOLD -> {
-                screen_main.setBackgroundColor(color(R.color.colorHold))
+                button_main.background = drawable(R.drawable.exhale_hold)
                 text_session.text = getString(R.string.time_left, sessionLeftSec)
-                text_muscle.text = getString(R.string.muscle_hold)
-                text_breath.text = getString(R.string.breath_exhale)
-                button_main.text = cycleLeftSec.toString()
-                button_main.background = drawable(R.drawable.button_exhale)
+                text_main.text = cycleLeftSec.toString()
             }
             State.INHALE_REST -> {
-                screen_main.setBackgroundColor(color(R.color.colorRest))
+                button_main.background = drawable(R.drawable.inhale_rest)
                 text_session.text = getString(R.string.time_left, sessionLeftSec)
-                text_muscle.text = getString(R.string.muscle_rest)
-                text_breath.text = getString(R.string.breath_inhale)
-                button_main.text = cycleLeftSec.toString()
-                button_main.background = drawable(R.drawable.button_inhale)
+                if (muscleStart) {
+                    text_main.text = getString(R.string.muscle_rest)
+                } else {
+                    text_main.text = cycleLeftSec.toString()
+                }
             }
             State.EXHALE_REST -> {
-                screen_main.setBackgroundColor(color(R.color.colorRest))
+                button_main.background = drawable(R.drawable.exhale_rest)
                 text_session.text = getString(R.string.time_left, sessionLeftSec)
-                text_muscle.text = getString(R.string.muscle_rest)
-                text_breath.text = getString(R.string.breath_exhale)
-                button_main.text = cycleLeftSec.toString()
-                button_main.background = drawable(R.drawable.button_exhale)
+                text_main.text = cycleLeftSec.toString()
             }
             State.PAUSE -> {
-                screen_main.setBackgroundColor(color(R.color.colorExhale))
-                button_main.text = getString(R.string.session_paused)
-                button_main.background = drawable(R.drawable.button_inhale)
+                button_main.background = drawable(R.drawable.idle_mouth_close)
+                text_main.text = getString(R.string.session_paused)
             }
         }
 

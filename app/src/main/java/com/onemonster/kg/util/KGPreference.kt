@@ -3,10 +3,6 @@ package com.onemonster.kg.util
 import android.content.SharedPreferences
 
 class KGPreference(private val sharedPreferences: SharedPreferences) {
-    var tabIndex: Int
-        get() = readInt(PreferenceKey.TabIndex, MAIN_SCREEN_INDEX)
-        set(value) = writeInt(PreferenceKey.TabIndex, value)
-
     var sessions: Int
         get() = readInt(PreferenceKey.Sessions, MEDIUM_SESSIONS)
         set(value) = writeInt(PreferenceKey.Sessions, value)

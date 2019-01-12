@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_popup_info"
+    android:padding="30dp"
+    >
+
+    <TextView
+        android:id="@+id/text_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/info_main"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/image_inhale_hold"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/inhale_hold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_info"
+        />
+
+    <TextView
+        android:id="@+id/text_inhale_hold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:text="@string/info_inhale_hold"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/image_inhale_hold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_inhale_hold"
+        app:layout_constraintTop_toTopOf="@+id/image_inhale_hold"
+        />
+
+    <ImageView
+        android:id="@+id/image_exhale_hold"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/exhale_hold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_inhale_hold"
+        />
+
+    <TextView
+        android:id="@+id/text_exhale_hold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:text="@string/info_exhale_hold"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/image_exhale_hold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_exhale_hold"
+        app:layout_constraintTop_toTopOf="@+id/image_exhale_hold"
+        />
+
+    <ImageView
+        android:id="@+id/image_inhale_rest"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/inhale_rest"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_exhale_hold"
+        />
+
+    <TextView
+        android:id="@+id/text_inhale_rest"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:text="@string/info_inhale_rest"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/image_inhale_rest"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_inhale_rest"
+        app:layout_constraintTop_toTopOf="@+id/image_inhale_rest"
+        />
+
+    <ImageView
+        android:id="@+id/image_exhale_rest"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/exhale_rest"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_inhale_rest"
+        />
+
+    <TextView
+        android:id="@+id/text_exhale_rest"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:text="@string/info_exhale_rest"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/image_exhale_rest"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_exhale_rest"
+        app:layout_constraintTop_toTopOf="@+id/image_exhale_rest"
+        />
+
+    <TextView
+        android:id="@+id/text_google_it"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/info_google_it"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_exhale_rest"
+        />
+</android.support.constraint.ConstraintLayout>

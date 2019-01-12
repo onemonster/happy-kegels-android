@@ -25,6 +25,14 @@
         <item>Start!</item>
     </string-array>
 
+    <!-- info popup -->
+    <string name="info_main">Find your Kegel muscles and repeatedly hold and rest them for healthier pelvic muscles!</string>
+    <string name="info_inhale_hold">Hold your kegel muscles and breath in</string>
+    <string name="info_exhale_hold">Keep holding your kegel muscles and breate out</string>
+    <string name="info_inhale_rest">Rest your kegel muscles and breath in</string>
+    <string name="info_exhale_rest">Keep resting your kegel muscles and breath out</string>
+    <string name="info_google_it">If you have problems finding your Kegels muscles or want to learn about its benefits please search about it on Google.</string>
+
     <!-- info -->
     <string name="header_1">Who are kegels for?</string>
     <string name="body_1">

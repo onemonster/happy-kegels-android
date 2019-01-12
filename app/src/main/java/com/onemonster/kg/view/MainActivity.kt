@@ -5,14 +5,12 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
-import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.google.android.gms.ads.AdRequest
@@ -30,6 +28,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var kgPreference: KGPreference
 
+    private lateinit var infoDialog: InfoDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,21 +41,31 @@ class MainActivity : AppCompatActivity() {
 
         kgPreference = KGPreference(sharedPreferences)
 
+        infoDialog = InfoDialog(this)
+        infoDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+
         setViews()
+        setEvents()
 
         setMainViews()
         setMainEvents()
         setMainTicker()
 
-        setInfoViews()
+//        setInfoViews()
 
-        setEtcViews()
-        setEtcEvents()
+//        setEtcViews()
+//        setEtcEvents()
     }
 
     private fun setViews() {
         val adRequest = AdRequest.Builder().build()
         ad_view.loadAd(adRequest)
+    }
+
+    private fun setEvents() {
+        button_info.setOnClickListener {
+            infoDialog.show()
+        }
     }
 
     private fun setMainViews(ticks: Int = 0) {

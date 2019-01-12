@@ -41,6 +41,8 @@ class MainActivity : AppCompatActivity() {
 
         kgPreference = KGPreference(sharedPreferences)
 
+        kgPreference.sessions = MEDIUM_SESSIONS
+
         infoDialog = InfoDialog(this)
         infoDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
 
@@ -75,24 +77,8 @@ class MainActivity : AppCompatActivity() {
         val cycleLeftSec = MUSCLE_TICKS - (ticks % MUSCLE_TICKS)
         val sessionLeftSec = kgPreference.sessions * CYCLE_TICKS - ticks
 
-//        // handle visibility
-//        when (state) {
-//            State.IDLE, State.START -> {
-//                text_breath.visible = false
-//                text_muscle.visible = false
-//                text_session.visible = false
-//            }
-//            State.RESTART,
-//            State.INHALE_HOLD,
-//            State.EXHALE_HOLD,
-//            State.INHALE_REST,
-//            State.EXHALE_REST,
-//            State.PAUSE -> {
-//                text_breath.visible = true
-//                text_muscle.visible = true
-//                text_session.visible = true
-//            }
-//        }
+        // handle visibility
+        text_restart.visible = state == State.PAUSE
 
         // handle background and text
         when (state) {
@@ -192,6 +178,9 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+        text_restart.setOnClickListener {
+            stopStart()
         }
     }
 
@@ -300,6 +289,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun stopStart() {
         ticker.pause()
+        ticker.cancel()
         state = State.IDLE
         setMainViews()
     }

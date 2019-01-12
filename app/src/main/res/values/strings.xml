@@ -11,7 +11,7 @@
     <string name="session_paused">Paused</string>
     <string name="session_restart">Restart</string>
 
-    <string name="time_left">%1$ds left</string>
+    <string name="time_left">Session %1$d seconds left</string>
 
     <string-array name="start_count_down">
         <item>ready (3)</item>

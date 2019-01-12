@@ -79,6 +79,8 @@ class MainActivity : AppCompatActivity() {
 
         // handle visibility
         text_restart.visible = state == State.PAUSE
+        text_session_left.visible = !inState(State.IDLE, State.PAUSE, State.RESTART, State.START)
+        text_session_left.text = getString(R.string.time_left, sessionLeftSec)
 
         // handle background and text
         when (state) {

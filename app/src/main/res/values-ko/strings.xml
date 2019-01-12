@@ -1,37 +1,37 @@
 <resources>
-    <string name="app_name">Happy Time</string>
+    <string name="app_name">행복한 운동</string>
 
     <!-- main -->
-    <string name="breath_inhale">Inhale</string>
-    <string name="breath_exhale">Exhale</string>
-    <string name="muscle_rest">Rest</string>
-    <string name="muscle_hold">Hold</string>
+    <string name="breath_inhale">들숨</string>
+    <string name="breath_exhale">날숨</string>
+    <string name="muscle_rest">이완</string>
+    <string name="muscle_hold">수축</string>
 
-    <string name="session_start">Start</string>
-    <string name="session_paused">Paused</string>
-    <string name="session_restart">Restart</string>
+    <string name="session_start">시작</string>
+    <string name="session_paused">정지</string>
+    <string name="session_restart">재시작</string>
 
-    <string name="time_left">Session %1$d seconds left</string>
+    <string name="time_left">세션이 %1$d초 남았습니다</string>
 
     <string-array name="start_count_down">
-        <item>ready (3)</item>
-        <item>ready (2)</item>
-        <item>ready (1)</item>
-        <item>Start!</item>
+        <item>준비 (3)</item>
+        <item>준비 (2)</item>
+        <item>준비 (1)</item>
+        <item>시작!</item>
     </string-array>
 
     <string-array name="restart_count_down">
-        <item>ready</item>
-        <item>Start!</item>
+        <item>준비</item>
+        <item>시작!</item>
     </string-array>
 
     <!-- info popup -->
-    <string name="info_main">Find your Kegel muscles and repeatedly hold and rest them for healthier pelvic muscles!</string>
-    <string name="info_inhale_hold">Hold your kegel muscles and breath in</string>
-    <string name="info_exhale_hold">Keep holding your kegel muscles and breate out</string>
-    <string name="info_inhale_rest">Rest your kegel muscles and breath in</string>
-    <string name="info_exhale_rest">Keep resting your kegel muscles and breath out</string>
-    <string name="info_google_it">If you have problems finding your Kegels muscles or want to learn about its benefits please search about it on Google.</string>
+    <string name="info_main">성기능 강화를 위해 케겔 근육을 열심히 훈련합시다!</string>
+    <string name="info_inhale_hold">케겔 근육을 수축하고 숨을 들이쉬세요</string>
+    <string name="info_exhale_hold">케겔 근육을 수축한 채 숨을 내쉐세요</string>
+    <string name="info_inhale_rest">케겔 근육을 이완하고 숨을 들이쉬세요</string>
+    <string name="info_exhale_rest">케겔 근육을 이완한 채 숨을 내쉐세요</string>
+    <string name="info_google_it">핑프 꿀팁: 케겔 근육을 못 찾겠거나 케겔 근육의 다양한 장점들을 알고 싶다면 검색을 해보세요!</string>
 
     <!-- info -->
     <string name="header_1">Who are kegels for?</string>

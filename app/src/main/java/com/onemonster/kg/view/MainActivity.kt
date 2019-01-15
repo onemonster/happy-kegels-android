@@ -68,11 +68,11 @@ class MainActivity : AppCompatActivity() {
         // handle background and text
         when (state) {
             State.IDLE -> {
-                button_main.background = drawable(R.drawable.idle_mouth_close)
+                image_main.background = drawable(R.drawable.idle_mouth_close)
                 text_main.text = getString(R.string.session_start)
             }
             State.START -> {
-                button_main.background = if (isMouthOpen) {
+                image_main.background = if (isMouthOpen) {
                     drawable(R.drawable.idle_mouth_open)
                 } else {
                     drawable(R.drawable.idle_mouth_close)
@@ -81,14 +81,14 @@ class MainActivity : AppCompatActivity() {
             }
             State.RESTART -> {
                 text_main.text = resources.getStringArray(R.array.restart_count_down)[ticks]
-                button_main.background = if (isMouthOpen) {
+                image_main.background = if (isMouthOpen) {
                     drawable(R.drawable.idle_mouth_open)
                 } else {
                     drawable(R.drawable.idle_mouth_close)
                 }
             }
             State.INHALE_HOLD -> {
-                button_main.background = drawable(R.drawable.inhale_hold)
+                image_main.background = drawable(R.drawable.inhale_hold)
                 if (muscleStart) {
                     text_main.text = getString(R.string.muscle_hold)
                 } else {
@@ -96,11 +96,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             State.EXHALE_HOLD -> {
-                button_main.background = drawable(R.drawable.exhale_hold)
+                image_main.background = drawable(R.drawable.exhale_hold)
                 text_main.text = cycleLeftSec.toString()
             }
             State.INHALE_REST -> {
-                button_main.background = drawable(R.drawable.inhale_rest)
+                image_main.background = drawable(R.drawable.inhale_rest)
                 if (muscleStart) {
                     text_main.text = getString(R.string.muscle_rest)
                 } else {
@@ -108,11 +108,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             State.EXHALE_REST -> {
-                button_main.background = drawable(R.drawable.exhale_rest)
+                image_main.background = drawable(R.drawable.exhale_rest)
                 text_main.text = cycleLeftSec.toString()
             }
             State.PAUSE -> {
-                button_main.background = drawable(R.drawable.idle_mouth_close)
+                image_main.background = drawable(R.drawable.idle_mouth_close)
                 text_main.text = getString(R.string.session_paused)
             }
         }
@@ -121,13 +121,13 @@ class MainActivity : AppCompatActivity() {
         when (state) {
             State.INHALE_HOLD, State.INHALE_REST -> {
                 if (breathStart) {
-                    button_main.startAnimation(inhaleAnimation)
+                    image_main.startAnimation(inhaleAnimation)
                 }
             }
 
             State.EXHALE_HOLD, State.EXHALE_REST -> {
                 if (breathStart) {
-                    button_main.startAnimation(exhaleAnimation)
+                    image_main.startAnimation(exhaleAnimation)
                 }
             }
         }

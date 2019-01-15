@@ -8,13 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/launch_screen</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
     <style name="DifficultyToggle" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:background">@drawable/toggle_difficulty</item>
         <item name="android:textColor">@color/toggle_color</item>

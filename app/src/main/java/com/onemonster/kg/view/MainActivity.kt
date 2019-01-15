@@ -1,22 +1,15 @@
 package com.onemonster.kg.view
 
 import android.content.Context
-import android.graphics.Typeface
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.RelativeSizeSpan
-import android.text.style.StyleSpan
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
-import com.onemonster.kg.BuildConfig
 import com.onemonster.kg.R
 import com.onemonster.kg.util.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -54,11 +47,6 @@ class MainActivity : AppCompatActivity() {
         setMainViews()
         setMainEvents()
         setMainTicker()
-
-//        setInfoViews()
-
-//        setEtcViews()
-//        setEtcEvents()
     }
 
     private fun setViews() {
@@ -108,7 +96,6 @@ class MainActivity : AppCompatActivity() {
             }
             State.INHALE_HOLD -> {
                 button_main.background = drawable(R.drawable.inhale_hold)
-                text_session.text = getString(R.string.time_left, sessionLeftSec)
                 if (muscleStart) {
                     text_main.text = getString(R.string.muscle_hold)
                 } else {
@@ -117,12 +104,10 @@ class MainActivity : AppCompatActivity() {
             }
             State.EXHALE_HOLD -> {
                 button_main.background = drawable(R.drawable.exhale_hold)
-                text_session.text = getString(R.string.time_left, sessionLeftSec)
                 text_main.text = cycleLeftSec.toString()
             }
             State.INHALE_REST -> {
                 button_main.background = drawable(R.drawable.inhale_rest)
-                text_session.text = getString(R.string.time_left, sessionLeftSec)
                 if (muscleStart) {
                     text_main.text = getString(R.string.muscle_rest)
                 } else {
@@ -131,7 +116,6 @@ class MainActivity : AppCompatActivity() {
             }
             State.EXHALE_REST -> {
                 button_main.background = drawable(R.drawable.exhale_rest)
-                text_session.text = getString(R.string.time_left, sessionLeftSec)
                 text_main.text = cycleLeftSec.toString()
             }
             State.PAUSE -> {
@@ -207,90 +191,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setInfoViews() {
-        val chapterSpan1 = SpannableString(getString(R.string.body_1))
-        val chapter1Header1 = getString(R.string.header_1_1)
-        val chapter1Header2 = getString(R.string.header_1_2)
-        val chapter1Header3 = getString(R.string.header_1_3)
-        val chapter1Header4 = getString(R.string.header_1_4)
-
-        chapterSpan1.setSpan(
-                RelativeSizeSpan(1.1f),
-                chapterSpan1.indexOf(chapter1Header1),
-                chapterSpan1.indexOf(chapter1Header1) + chapter1Header1.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        chapterSpan1.setSpan(
-                RelativeSizeSpan(1.1f),
-                chapterSpan1.indexOf(chapter1Header2),
-                chapterSpan1.indexOf(chapter1Header2) + chapter1Header2.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        chapterSpan1.setSpan(
-                RelativeSizeSpan(1.1f),
-                chapterSpan1.indexOf(chapter1Header3),
-                chapterSpan1.indexOf(chapter1Header3) + chapter1Header3.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        chapterSpan1.setSpan(
-                RelativeSizeSpan(1.1f),
-                chapterSpan1.indexOf(chapter1Header4),
-                chapterSpan1.indexOf(chapter1Header4) + chapter1Header4.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        chapterSpan1.setSpan(
-                StyleSpan(Typeface.BOLD),
-                chapterSpan1.indexOf(chapter1Header1),
-                chapterSpan1.indexOf(chapter1Header1) + chapter1Header1.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        chapterSpan1.setSpan(
-                StyleSpan(Typeface.BOLD),
-                chapterSpan1.indexOf(chapter1Header2),
-                chapterSpan1.indexOf(chapter1Header2) + chapter1Header2.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        chapterSpan1.setSpan(
-                StyleSpan(Typeface.BOLD),
-                chapterSpan1.indexOf(chapter1Header3),
-                chapterSpan1.indexOf(chapter1Header3) + chapter1Header3.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        chapterSpan1.setSpan(
-                StyleSpan(Typeface.BOLD),
-                chapterSpan1.indexOf(chapter1Header4),
-                chapterSpan1.indexOf(chapter1Header4) + chapter1Header4.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-
-        chapter_1.text = chapterSpan1
-    }
-
-    private fun setEtcViews() {
-        renderDifficultyToggles()
-    }
-
-    private fun setEtcEvents() {
-        toggle_difficulty_easy.setOnCheckedChangeListener { _, checked ->
-            if (checked) {
-                kgPreference.sessions = EASY_SESSIONS
-            }
-            renderDifficultyToggles()
-        }
-        toggle_difficulty_medium.setOnCheckedChangeListener { _, checked ->
-            if (checked) {
-                kgPreference.sessions = MEDIUM_SESSIONS
-            }
-            renderDifficultyToggles()
-        }
-        toggle_difficulty_hard.setOnCheckedChangeListener { _, checked ->
-            if (checked) {
-                kgPreference.sessions = HARD_SESSIONS
-            }
-            renderDifficultyToggles()
-        }
-    }
-
     private fun stopStart() {
         ticker.pause()
         ticker.cancel()
@@ -310,26 +210,6 @@ class MainActivity : AppCompatActivity() {
         exhaleAnimation.cancel()
         state = State.PAUSE
         setMainViews()
-    }
-
-    private fun renderDifficultyToggles() {
-        when (kgPreference.sessions) {
-            EASY_SESSIONS -> {
-                toggle_difficulty_easy.isChecked = true
-                toggle_difficulty_medium.isChecked = false
-                toggle_difficulty_hard.isChecked = false
-            }
-            MEDIUM_SESSIONS -> {
-                toggle_difficulty_easy.isChecked = false
-                toggle_difficulty_medium.isChecked = true
-                toggle_difficulty_hard.isChecked = false
-            }
-            HARD_SESSIONS -> {
-                toggle_difficulty_easy.isChecked = false
-                toggle_difficulty_medium.isChecked = false
-                toggle_difficulty_hard.isChecked = true
-            }
-        }
     }
 
     enum class State {

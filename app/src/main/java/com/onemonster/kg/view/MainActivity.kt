@@ -41,26 +41,19 @@ class MainActivity : AppCompatActivity() {
         infoDialog = InfoDialog(this)
         infoDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
 
+        loadBannerAd()
+
         setViews()
         setEvents()
-
-        setMainViews()
-        setMainEvents()
-        setMainTicker()
+        setTicker()
     }
 
-    private fun setViews() {
+    private fun loadBannerAd() {
         val adRequest = AdRequest.Builder().build()
         ad_view.loadAd(adRequest)
     }
 
-    private fun setEvents() {
-        button_info.setOnClickListener {
-            infoDialog.show()
-        }
-    }
-
-    private fun setMainViews(ticks: Int = 0) {
+    private fun setViews(ticks: Int = 0) {
         val breathStart = ticks % BREATH_TICKS == 0
         val muscleStart = ticks % MUSCLE_TICKS == 0
         val isMouthOpen = ticks % 2 == 1
@@ -140,14 +133,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setMainEvents() {
+    private fun setEvents() {
+        button_info.setOnClickListener {
+            infoDialog.show()
+        }
         button_main.setOnClickListener {
             when (state) {
                 State.IDLE -> {
                     state = State.START
-                    setMainViews()
+                    setViews()
                     ticker.start(READY_TICKS) { ticks ->
-                        setMainViews(ticks)
+                        setViews(ticks)
                     }
                 }
                 State.START -> stopStart()
@@ -160,9 +156,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 State.PAUSE -> {
                     state = State.RESTART
-                    setMainViews()
+                    setViews()
                     ticker.start(RESTART_TICKS) { ticks ->
-                        setMainViews(ticks)
+                        setViews(ticks)
                     }
                 }
             }
@@ -172,7 +168,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setMainTicker() {
+    private fun setTicker() {
         ticker = object : Ticker(kgPreference.sessions * CYCLE_TICKS * TICK_LENGTH, TICK_LENGTH) {
             override fun onTick(ticks: Int) {
                 when (ticks % CYCLE_TICKS) {
@@ -181,12 +177,12 @@ class MainActivity : AppCompatActivity() {
                     in BREATH_TICKS * 4 until BREATH_TICKS * 5, in BREATH_TICKS * 6 until BREATH_TICKS * 7 -> state = State.INHALE_REST
                     in BREATH_TICKS * 5 until BREATH_TICKS * 6, in BREATH_TICKS * 7 until BREATH_TICKS * 8 -> state = State.EXHALE_REST
                 }
-                setMainViews(ticks)
+                setViews(ticks)
             }
 
             override fun onFinish() {
                 state = State.IDLE
-                setMainViews()
+                setViews()
             }
         }
     }
@@ -195,13 +191,13 @@ class MainActivity : AppCompatActivity() {
         ticker.pause()
         ticker.cancel()
         state = State.IDLE
-        setMainViews()
+        setViews()
     }
 
     private fun stopRestart() {
         ticker.pause()
         state = State.PAUSE
-        setMainViews()
+        setViews()
     }
 
     private fun pause() {
@@ -209,7 +205,7 @@ class MainActivity : AppCompatActivity() {
         inhaleAnimation.cancel()
         exhaleAnimation.cancel()
         state = State.PAUSE
-        setMainViews()
+        setViews()
     }
 
     enum class State {

@@ -32,4 +32,9 @@
     <string name="info_inhale_rest">Rest your kegel muscles and breath in</string>
     <string name="info_exhale_rest">Keep resting your kegel muscles and breath out</string>
     <string name="info_google_it">If you have problems finding your Kegels muscles or want to learn about its benefits please search about it on Google.</string>
+
+    <!-- finish popup -->
+    <string name="finish_daily_stat">Daily goal: %1$d/%2$d</string>
+    <string name="finish_daily_finished">Daily goal met!</string>
+    <string name="finish_tip">It is best to train %1$d times a day</string>
 </resources>

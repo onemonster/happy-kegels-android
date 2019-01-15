@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var kgPreference: KGPreference
 
     private lateinit var infoDialog: InfoDialog
+    private lateinit var finishDialog: FinishDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,10 +38,13 @@ class MainActivity : AppCompatActivity() {
 
         kgPreference = KGPreference(sharedPreferences)
 
-        kgPreference.sessions = MEDIUM_SESSIONS
+        kgPreference.cyclesPerSessions = MEDIUM_SESSIONS
 
         infoDialog = InfoDialog(this)
         infoDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+
+        finishDialog = FinishDialog(this)
+        finishDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
 
         loadBannerAd()
 
@@ -66,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         val muscleStart = ticks % MUSCLE_TICKS == 0
         val isMouthOpen = ticks % 2 == 1
         val cycleLeftSec = MUSCLE_TICKS - (ticks % MUSCLE_TICKS)
-        val sessionLeftSec = kgPreference.sessions * CYCLE_TICKS - ticks
+        val sessionLeftSec = kgPreference.cyclesPerSessions * CYCLE_TICKS - ticks
 
         // handle visibility
         text_restart.visible = state == State.PAUSE
@@ -146,6 +150,9 @@ class MainActivity : AppCompatActivity() {
     private fun setEvents() {
         button_info.setOnClickListener {
             infoDialog.show()
+            if (!ticker.isPaused) {
+                pause()
+            }
         }
         button_main.setOnClickListener {
             when (state) {
@@ -180,10 +187,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setTicker() {
         ticker = object : Ticker(
-                kgPreference.sessions * CYCLE_TICKS * TICK_LENGTH,
+                kgPreference.cyclesPerSessions * CYCLE_TICKS * TICK_LENGTH,
                 TICK_LENGTH,
                 { window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) },
-                { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+                { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) },
+                { finishDialog.show(kgPreference.registerSessionDoneToday()) }
         ) {
             override fun onTick(ticks: Int) {
                 when (ticks % CYCLE_TICKS) {

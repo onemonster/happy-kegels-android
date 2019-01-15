@@ -1,11 +1,37 @@
 package com.onemonster.kg.util
 
 import android.content.SharedPreferences
+import java.text.SimpleDateFormat
+import java.util.*
 
 class KGPreference(private val sharedPreferences: SharedPreferences) {
-    var sessions: Int
-        get() = readInt(PreferenceKey.Sessions, MEDIUM_SESSIONS)
-        set(value) = writeInt(PreferenceKey.Sessions, value)
+    var cyclesPerSessions: Int
+        get() = readInt(PreferenceKey.CYCLES_PER_SESSIONS, MEDIUM_SESSIONS)
+        set(value) = writeInt(PreferenceKey.CYCLES_PER_SESSIONS, value)
+
+    private var today: String
+        get() = readString(PreferenceKey.TODAY, "")
+        set(value) = writeString(PreferenceKey.TODAY, value)
+
+    var sessionsDoneToday: Int
+        get() = readInt(PreferenceKey.SESSIONS_DONE_TODAY, 0)
+        private set(value) = writeInt(PreferenceKey.SESSIONS_DONE_TODAY, value)
+
+    fun registerSessionDoneToday(): Int {
+        val date = SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().time)
+        if (today == date) {
+            sessionsDoneToday += 1
+        } else {
+            today = date
+            sessionsDoneToday = 1
+        }
+        totalSessionsDone += 1
+        return sessionsDoneToday
+    }
+
+    var totalSessionsDone: Int
+        get() = readInt(PreferenceKey.TOTAL_SESSIONS_DONE, 0)
+        private set(value) = writeInt(PreferenceKey.TOTAL_SESSIONS_DONE, value)
 
     private fun readInt(key: PreferenceKey, defaultValue: Int): Int =
             sharedPreferences.getInt(key.name, defaultValue)
@@ -27,6 +53,8 @@ class KGPreference(private val sharedPreferences: SharedPreferences) {
 }
 
 enum class PreferenceKey {
-    TabIndex,
-    Sessions
+    CYCLES_PER_SESSIONS,
+    TODAY,
+    SESSIONS_DONE_TODAY,
+    TOTAL_SESSIONS_DONE
 }

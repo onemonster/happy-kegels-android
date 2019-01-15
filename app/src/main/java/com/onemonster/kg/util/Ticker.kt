@@ -6,7 +6,8 @@ abstract class Ticker(
         private val millisInFuture: Long,
         private val countDownInterval: Long,
         private val onStart: () -> Unit,
-        private val onPause: () -> Unit
+        private val onPause: () -> Unit,
+        private val onFinish: () -> Unit
 ) {
     private var millisRemaining = millisInFuture
     private var ticks = 0
@@ -37,6 +38,7 @@ abstract class Ticker(
                 millisRemaining = millisInFuture
                 ticks = 0
                 isPaused = true
+                this@Ticker.onFinish.invoke()
             }
         }
     }

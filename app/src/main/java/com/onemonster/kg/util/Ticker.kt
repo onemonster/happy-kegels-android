@@ -2,14 +2,27 @@ package com.onemonster.kg.util
 
 import android.os.CountDownTimer
 
-abstract class Ticker(private val millisInFuture: Long, private val countDownInterval: Long) {
+abstract class Ticker(
+        private val millisInFuture: Long,
+        private val countDownInterval: Long,
+        private val onStart: () -> Unit,
+        private val onPause: () -> Unit
+) {
     private var millisRemaining = millisInFuture
     private var ticks = 0
 
     private var countDownTimer: CountDownTimer? = null
     private var delayCountDownTimer: CountDownTimer? = null
 
-    private var isPaused = true
+    var isPaused = true
+        set(value) {
+            if (value) {
+                onPause()
+            } else {
+                onStart()
+            }
+            field = value
+        }
 
     private fun createCountDownTimer() {
         countDownTimer = object : CountDownTimer(millisRemaining, countDownInterval) {

@@ -41,7 +41,7 @@
         app:layout_constraintTop_toTopOf="parent"
         >
 
-        <Button
+        <ImageView
             android:id="@+id/image_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginStart="30dp"
-            android:background="@drawable/idle_mouth_close"
+            android:src="@drawable/idle_mouth_close"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

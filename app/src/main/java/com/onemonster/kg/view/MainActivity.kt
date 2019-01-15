@@ -6,6 +6,7 @@ import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.google.android.gms.ads.AdRequest
@@ -48,6 +49,13 @@ class MainActivity : AppCompatActivity() {
         setTicker()
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (!ticker.isPaused) {
+            pause()
+        }
+    }
+
     private fun loadBannerAd() {
         val adRequest = AdRequest.Builder().build()
         ad_view.loadAd(adRequest)
@@ -68,27 +76,29 @@ class MainActivity : AppCompatActivity() {
         // handle background and text
         when (state) {
             State.IDLE -> {
-                image_main.background = drawable(R.drawable.idle_mouth_close)
+                image_main.setImageResource(R.drawable.idle_mouth_close)
                 text_main.text = getString(R.string.session_start)
             }
             State.START -> {
-                image_main.background = if (isMouthOpen) {
-                    drawable(R.drawable.idle_mouth_open)
+                val strings = resources.getStringArray(R.array.start_count_down)
+                text_main.text = strings.getOrElse(ticks) { strings.last() }
+                image_main.setImageResource(if (isMouthOpen) {
+                    R.drawable.idle_mouth_open
                 } else {
-                    drawable(R.drawable.idle_mouth_close)
-                }
-                text_main.text = resources.getStringArray(R.array.start_count_down)[ticks]
+                    R.drawable.idle_mouth_close
+                })
             }
             State.RESTART -> {
-                text_main.text = resources.getStringArray(R.array.restart_count_down)[ticks]
-                image_main.background = if (isMouthOpen) {
-                    drawable(R.drawable.idle_mouth_open)
+                val strings = resources.getStringArray(R.array.restart_count_down)
+                text_main.text = strings.getOrElse(ticks) { strings.last() }
+                image_main.setImageResource(if (isMouthOpen) {
+                    R.drawable.idle_mouth_open
                 } else {
-                    drawable(R.drawable.idle_mouth_close)
-                }
+                    R.drawable.idle_mouth_close
+                })
             }
             State.INHALE_HOLD -> {
-                image_main.background = drawable(R.drawable.inhale_hold)
+                image_main.setImageResource(R.drawable.inhale_hold)
                 if (muscleStart) {
                     text_main.text = getString(R.string.muscle_hold)
                 } else {
@@ -96,11 +106,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             State.EXHALE_HOLD -> {
-                image_main.background = drawable(R.drawable.exhale_hold)
+                image_main.setImageResource(R.drawable.exhale_hold)
                 text_main.text = cycleLeftSec.toString()
             }
             State.INHALE_REST -> {
-                image_main.background = drawable(R.drawable.inhale_rest)
+                image_main.setImageResource(R.drawable.inhale_rest)
                 if (muscleStart) {
                     text_main.text = getString(R.string.muscle_rest)
                 } else {
@@ -108,11 +118,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             State.EXHALE_REST -> {
-                image_main.background = drawable(R.drawable.exhale_rest)
+                image_main.setImageResource(R.drawable.exhale_rest)
                 text_main.text = cycleLeftSec.toString()
             }
             State.PAUSE -> {
-                image_main.background = drawable(R.drawable.idle_mouth_close)
+                image_main.setImageResource(R.drawable.idle_mouth_close)
                 text_main.text = getString(R.string.session_paused)
             }
         }
@@ -169,7 +179,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setTicker() {
-        ticker = object : Ticker(kgPreference.sessions * CYCLE_TICKS * TICK_LENGTH, TICK_LENGTH) {
+        ticker = object : Ticker(
+                kgPreference.sessions * CYCLE_TICKS * TICK_LENGTH,
+                TICK_LENGTH,
+                { window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) },
+                { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+        ) {
             override fun onTick(ticks: Int) {
                 when (ticks % CYCLE_TICKS) {
                     in BREATH_TICKS * 0 until BREATH_TICKS * 1, in BREATH_TICKS * 2 until BREATH_TICKS * 3 -> state = State.INHALE_HOLD

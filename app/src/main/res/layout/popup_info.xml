@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
@@ -34,8 +34,8 @@
         android:id="@+id/text_inhale_hold"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
         android:text="@string/info_inhale_hold"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="@+id/image_inhale_hold"
@@ -58,8 +58,8 @@
         android:id="@+id/text_exhale_hold"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
         android:text="@string/info_exhale_hold"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="@+id/image_exhale_hold"
@@ -82,8 +82,8 @@
         android:id="@+id/text_inhale_rest"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
         android:text="@string/info_inhale_rest"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="@+id/image_inhale_rest"
@@ -106,8 +106,8 @@
         android:id="@+id/text_exhale_rest"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
         android:text="@string/info_exhale_rest"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="@+id/image_exhale_rest"
@@ -128,4 +128,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_exhale_rest"
         />
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

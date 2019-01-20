@@ -2,13 +2,13 @@ package com.onemonster.kg.view
 
 import android.content.Context
 import android.os.Bundle
-import android.support.annotation.ColorRes
-import android.support.annotation.DrawableRes
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.onemonster.kg.R
@@ -41,10 +41,10 @@ class MainActivity : AppCompatActivity() {
         kgPreference.cyclesPerSessions = MEDIUM_SESSIONS
 
         infoDialog = InfoDialog(this)
-        infoDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+        infoDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         finishDialog = FinishDialog(this)
-        finishDialog.window.setBackgroundDrawableResource(android.R.color.transparent)
+        finishDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         loadBannerAd()
 

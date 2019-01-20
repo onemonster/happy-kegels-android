@@ -8,7 +8,7 @@
     <string name="muscle_hold">Hold</string>
 
     <string name="session_start">Start</string>
-    <string name="session_paused">Paused</string>
+    <string name="session_paused">Resume</string>
     <string name="session_restart">Restart</string>
 
     <string name="time_left">Session %1$d seconds left</string>

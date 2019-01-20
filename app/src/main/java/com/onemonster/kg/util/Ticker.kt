@@ -29,8 +29,8 @@ abstract class Ticker(
         countDownTimer = object : CountDownTimer(millisRemaining, countDownInterval) {
             override fun onTick(millisUntilFinished: Long) {
                 millisRemaining = millisUntilFinished
+                ticks = ((millisInFuture - millisUntilFinished) / countDownInterval).toInt()
                 this@Ticker.onTick(ticks)
-                ticks += 1
             }
 
             override fun onFinish() {
@@ -60,8 +60,8 @@ abstract class Ticker(
             delayCountDownTimer = object : CountDownTimer(delayTicks * countDownInterval, countDownInterval) {
                 var ticks = 0
                 override fun onTick(millisUntilFinished: Long) {
+                    ticks = ((delayTicks * countDownInterval - millisUntilFinished) / countDownInterval).toInt()
                     onTick?.invoke(ticks)
-                    ticks += 1
                 }
 
                 override fun onFinish() {

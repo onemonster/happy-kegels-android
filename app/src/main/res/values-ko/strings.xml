@@ -8,7 +8,7 @@
     <string name="muscle_hold">수축</string>
 
     <string name="session_start">시작</string>
-    <string name="session_paused">정지됨</string>
+    <string name="session_paused">재개</string>
     <string name="session_restart">재시작</string>
 
     <string name="time_left">세션이 %1$d초 남았습니다</string>

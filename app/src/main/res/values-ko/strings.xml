@@ -28,10 +28,17 @@
     <!-- info popup -->
     <string name="info_main">성기능 강화를 위해 케겔 근육을 열심히 훈련합시다!</string>
     <string name="info_inhale_hold">케겔 근육을 수축하고 숨을 들이쉬세요</string>
-    <string name="info_exhale_hold">케겔 근육을 수축한 채 숨을 내쉐세요</string>
+    <string name="info_exhale_hold">케겔 근육을 수축한 채 숨을 내쉬세요</string>
     <string name="info_inhale_rest">케겔 근육을 이완하고 숨을 들이쉬세요</string>
-    <string name="info_exhale_rest">케겔 근육을 이완한 채 숨을 내쉐세요</string>
+    <string name="info_exhale_rest">케겔 근육을 이완한 채 숨을 내쉬세요</string>
     <string name="info_google_it">핑프 꿀팁: 케겔 근육을 못 찾겠거나 케겔 근육의 다양한 장점들을 알고 싶다면 검색을 해보세요!</string>
+
+    <string name="info_bold_hold">수축</string>
+    <string name="info_bold_holding">수축</string>
+    <string name="info_bold_rest">이완</string>
+    <string name="info_bold_resting">이완</string>
+    <string name="info_bold_breath_in">들이쉬세요</string>
+    <string name="info_bold_breath_out">내쉬세요</string>
 
     <!-- finish popup -->
     <string name="finish_daily_stat">오늘 목표: %1$d/%2$d</string>
